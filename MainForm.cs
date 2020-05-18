@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Reflection;
 using CRUD_lib;
 using Serialization_lib;
+using System.IO;
 
 namespace lab_2
 {
@@ -109,7 +110,15 @@ namespace lab_2
             }
             else
             {
-                treeView.SelectedNode.Text = ((FieldInfo)treeView.SelectedNode.Tag).Name + ": " + comboBoxValue.Text;
+                if (numericValue.Visible == true)
+                {
+                    treeView.SelectedNode.Text = ((FieldInfo)treeView.SelectedNode.Tag).Name + ": " + numericValue.Value;
+                    numericValue.Value = 0;
+                }
+                else
+                {
+                    treeView.SelectedNode.Text = ((FieldInfo)treeView.SelectedNode.Tag).Name + ": " + comboBoxValue.Text;
+                }
             }
         }
 
@@ -130,23 +139,38 @@ namespace lab_2
             if (treeView.SelectedNode.Level == 2) //Is property selected
             {
                 btnEdit.Enabled = true;
-                if (((FieldInfo)treeView.SelectedNode.Tag).FieldType.Namespace == "CRUD_lib") //Is class-property selected
-                {
-                    textBoxValue.Visible = false;
-                    comboBoxValue.Visible = true;
-                    comboBoxValue.Enabled = true;
-                    comboBoxValue_Fill();
-                }
-                else
+
+                if (((FieldInfo)treeView.SelectedNode.Tag).FieldType == typeof(string))
                 {
                     textBoxValue.Visible = true;
                     textBoxValue.Enabled = true;
                     comboBoxValue.Visible = false;
+                    numericValue.Visible = false;
+                }
+                else
+                {
+                    if (((FieldInfo)treeView.SelectedNode.Tag).FieldType == typeof(int))
+                    {
+                        numericValue.Visible = true;
+                        numericValue.Enabled = true;
+                        textBoxValue.Visible = false;
+                        comboBoxValue.Visible = false;
+                    }
+                    else
+                    {
+
+                        textBoxValue.Visible = false;
+                        numericValue.Visible = false;
+                        comboBoxValue.Visible = true;
+                        comboBoxValue.Enabled = true;
+                        comboBoxValue_Fill();
+                    }
                 }
             }
             else
             {
                 btnEdit.Enabled = false;
+                numericValue.Enabled = false;
                 comboBoxValue.Enabled = false;
                 textBoxValue.Enabled = false;
             }
@@ -155,6 +179,20 @@ namespace lab_2
         }
 
         private void btnSave_Click(object sender, EventArgs e)
+        {
+            if (saveFileDialog.ShowDialog() == DialogResult.Cancel)
+                return;
+
+            ISerializer serializer = (ISerializer)Activator.CreateInstance((Type)comboBoxType.SelectedValue);
+            object[] objects = new object[treeView.Nodes[0].Nodes.Count];
+
+            using (FileStream fs = new FileStream(saveFileDialog.FileName, FileMode.OpenOrCreate))
+            {
+                serializer.Serialize(objects, fs);
+            }
+        }
+
+        private void numericValue_ValueChanged(object sender, EventArgs e)
         {
 
         }

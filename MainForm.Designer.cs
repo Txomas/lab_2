@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Objects");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Objects");
             this.comboBox = new System.Windows.Forms.ComboBox();
             this.btnAdd = new System.Windows.Forms.Button();
             this.panel = new System.Windows.Forms.Panel();
@@ -45,7 +45,11 @@
             this.btnOpen = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.comboBoxType = new System.Windows.Forms.ComboBox();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.numericValue = new System.Windows.Forms.NumericUpDown();
             this.panel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericValue)).BeginInit();
             this.SuspendLayout();
             // 
             // comboBox
@@ -74,6 +78,7 @@
             // 
             // panel
             // 
+            this.panel.Controls.Add(this.numericValue);
             this.panel.Controls.Add(this.comboBoxType);
             this.panel.Controls.Add(this.label4);
             this.panel.Controls.Add(this.btnOpen);
@@ -175,10 +180,10 @@
             this.treeView.HideSelection = false;
             this.treeView.Location = new System.Drawing.Point(0, 0);
             this.treeView.Name = "treeView";
-            treeNode1.Name = "Node0";
-            treeNode1.Text = "Objects";
+            treeNode4.Name = "Node0";
+            treeNode4.Text = "Objects";
             this.treeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1});
+            treeNode4});
             this.treeView.Size = new System.Drawing.Size(466, 590);
             this.treeView.TabIndex = 3;
             this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_AfterSelect);
@@ -226,12 +231,39 @@
             // 
             // comboBoxType
             // 
+            this.comboBoxType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxType.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboBoxType.FormattingEnabled = true;
             this.comboBoxType.Location = new System.Drawing.Point(16, 468);
             this.comboBoxType.Name = "comboBoxType";
             this.comboBoxType.Size = new System.Drawing.Size(271, 46);
             this.comboBoxType.TabIndex = 15;
+            // 
+            // saveFileDialog
+            // 
+            this.saveFileDialog.CheckPathExists = false;
+            this.saveFileDialog.DefaultExt = "dat";
+            // 
+            // openFileDialog
+            // 
+            this.openFileDialog.DefaultExt = "dat";
+            this.openFileDialog.FileName = "openFileDialog1";
+            // 
+            // numericValue
+            // 
+            this.numericValue.Enabled = false;
+            this.numericValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.numericValue.Location = new System.Drawing.Point(16, 306);
+            this.numericValue.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.numericValue.Name = "numericValue";
+            this.numericValue.ReadOnly = true;
+            this.numericValue.Size = new System.Drawing.Size(271, 45);
+            this.numericValue.TabIndex = 16;
+            this.numericValue.Visible = false;
             // 
             // MainForm
             // 
@@ -245,6 +277,7 @@
             this.Text = "Form";
             this.panel.ResumeLayout(false);
             this.panel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericValue)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -267,6 +300,9 @@
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox comboBoxType;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog;
+        private System.Windows.Forms.OpenFileDialog openFileDialog;
+        private System.Windows.Forms.NumericUpDown numericValue;
     }
 }
 
