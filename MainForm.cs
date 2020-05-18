@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Reflection;
+using CRUD_lib;
+using Serialization_lib;
 
 namespace lab_2
 {
@@ -17,11 +19,26 @@ namespace lab_2
         {
             InitializeComponent();
 
-            Assembly Asm = Assembly.LoadFrom("CRUD_lib.dll");
-            List<Type> Types = new List<Type>();
-            foreach (Type t in Asm.GetTypes())
+            Assembly SerializationAsm = Assembly.LoadFrom("Serialization_lib.dll");
+            List<ControlInfoAttribute> Attributes = new List<ControlInfoAttribute>();
+            foreach (Type t in SerializationAsm.GetTypes())
             {
-                if (!t.IsAbstract)
+               object[] attrs = t.GetCustomAttributes(typeof(ControlInfoAttribute), false);
+               if (attrs.Length > 0)
+                {
+                    Attributes.Add((ControlInfoAttribute)attrs[0]);
+                }
+            }
+                        
+            comboBoxType.DataSource = Attributes;
+            comboBoxType.DisplayMember = "Text";
+            comboBoxType.ValueMember = "type";
+
+            Assembly CRUDAsm = Assembly.LoadFrom("CRUD_lib.dll");
+            List<Type> Types = new List<Type>();
+            foreach (Type t in CRUDAsm.GetTypes())
+            {
+                if (!t.IsAbstract && !t.IsSubclassOf(typeof(Attribute)))
                     Types.Add(t);
             }
             comboBox.DataSource = Types;
@@ -46,7 +63,15 @@ namespace lab_2
             treeView.Nodes[0].Nodes.Add(new TreeNode(textBoxName.Text));
             foreach (FieldInfo f in ((Type)comboBox.SelectedItem).GetFields())
             {
-                treeView.Nodes[0].LastNode.Nodes.Add(new TreeNode(f.Name + ": "));
+                object[] attrs = f.GetCustomAttributes(typeof(NormalNameAttribute), false);
+                if (attrs.Length > 0)
+                {
+                    treeView.Nodes[0].LastNode.Nodes.Add(new TreeNode(((NormalNameAttribute)attrs[0]).Name + ": "));
+                }
+                else
+                {
+                    treeView.Nodes[0].LastNode.Nodes.Add(new TreeNode(f.Name + ": "));
+                }
                 treeView.Nodes[0].LastNode.LastNode.Tag = f;
                 treeView.Nodes[0].LastNode.Tag = comboBox.SelectedItem;
             }
@@ -127,6 +152,11 @@ namespace lab_2
             }
 
             btnDelete.Enabled = treeView.SelectedNode.Level == 1 ? true : false;
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lab_2", "lab_2.csproj", "{3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRUD_lib", "..\CRUD_lib\CRUD_lib.csproj", "{DE08BE58-9417-4F79-827F-CFF94888502B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serialization_lib", "..\Serialization_lib\Serialization_lib.csproj", "{F56DB4EF-8EF2-45C7-B537-4A99160FF9B4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{DE08BE58-9417-4F79-827F-CFF94888502B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE08BE58-9417-4F79-827F-CFF94888502B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE08BE58-9417-4F79-827F-CFF94888502B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F56DB4EF-8EF2-45C7-B537-4A99160FF9B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F56DB4EF-8EF2-45C7-B537-4A99160FF9B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F56DB4EF-8EF2-45C7-B537-4A99160FF9B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F56DB4EF-8EF2-45C7-B537-4A99160FF9B4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
