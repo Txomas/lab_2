@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Objects");
+            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Objects");
             this.comboBox = new System.Windows.Forms.ComboBox();
             this.btnAdd = new System.Windows.Forms.Button();
             this.panel = new System.Windows.Forms.Panel();
@@ -180,10 +180,10 @@
             this.treeView.HideSelection = false;
             this.treeView.Location = new System.Drawing.Point(0, 0);
             this.treeView.Name = "treeView";
-            treeNode4.Name = "Node0";
-            treeNode4.Text = "Objects";
+            treeNode7.Name = "Node0";
+            treeNode7.Text = "Objects";
             this.treeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode4});
+            treeNode7});
             this.treeView.Size = new System.Drawing.Size(466, 590);
             this.treeView.TabIndex = 3;
             this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_AfterSelect);
@@ -218,6 +218,7 @@
             this.btnOpen.TabIndex = 12;
             this.btnOpen.Text = "Open";
             this.btnOpen.UseVisualStyleBackColor = true;
+            this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
             // 
             // label4
             // 
@@ -251,6 +252,7 @@
             // 
             // numericValue
             // 
+            this.numericValue.DecimalPlaces = 3;
             this.numericValue.Enabled = false;
             this.numericValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.numericValue.Location = new System.Drawing.Point(16, 306);
@@ -260,7 +262,6 @@
             0,
             0});
             this.numericValue.Name = "numericValue";
-            this.numericValue.ReadOnly = true;
             this.numericValue.Size = new System.Drawing.Size(271, 45);
             this.numericValue.TabIndex = 16;
             this.numericValue.Visible = false;

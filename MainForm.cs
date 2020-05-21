@@ -52,7 +52,7 @@ namespace lab_2
             comboBoxValue.Items.Clear();
             foreach (TreeNode T in treeView.Nodes[0].Nodes)
             {
-                if ((Type)T.Tag == ((FieldInfo)treeView.SelectedNode.Tag).FieldType) 
+                if (((InfoCRUD)T.Tag).type == ((InfoCRUD)treeView.SelectedNode.Tag).type) 
                 {
                     comboBoxValue.Items.Add(T.Text);
                 }
@@ -64,18 +64,14 @@ namespace lab_2
             treeView.Nodes[0].Nodes.Add(new TreeNode(textBoxName.Text));
             foreach (FieldInfo f in ((Type)comboBox.SelectedItem).GetFields())
             {
+                InfoCRUD I = new InfoCRUD { type = f.FieldType };
                 object[] attrs = f.GetCustomAttributes(typeof(NormalNameAttribute), false);
-                if (attrs.Length > 0)
-                {
-                    treeView.Nodes[0].LastNode.Nodes.Add(new TreeNode(((NormalNameAttribute)attrs[0]).Name + ": "));
-                }
-                else
-                {
-                    treeView.Nodes[0].LastNode.Nodes.Add(new TreeNode(f.Name + ": "));
-                }
-                treeView.Nodes[0].LastNode.LastNode.Tag = f;
-                treeView.Nodes[0].LastNode.Tag = comboBox.SelectedItem;
+                I.Name = attrs.Length > 0 ? ((NormalNameAttribute)attrs[0]).Name : f.Name;
+                treeView.Nodes[0].LastNode.Nodes.Add(new TreeNode(I.Name + ": "));
+                treeView.Nodes[0].LastNode.LastNode.Tag = I;    
             }
+            InfoCRUD i = new InfoCRUD { type = (Type)comboBox.SelectedItem };
+            treeView.Nodes[0].LastNode.Tag = i;
 
             treeView.Nodes[0].ExpandAll();
             if (comboBoxValue.Enabled == true)
@@ -91,9 +87,9 @@ namespace lab_2
             {
                 foreach (TreeNode P in T.Nodes) //Look through properties
                 {
-                    if (P.Text == ((FieldInfo)P.Tag).Name + ": " + treeView.SelectedNode.Text) //Is property-node value equals object-node text
+                    if (P.Text == ((InfoCRUD)P.Tag).Name + ": " + treeView.SelectedNode.Text) //Is property-node value equals object-node text
                     {
-                        P.Text = ((FieldInfo)P.Tag).Name; //Clear property value
+                        P.Text = ((InfoCRUD)P.Tag).Name; //Clear property value
                     }
                 }
             }
@@ -105,19 +101,19 @@ namespace lab_2
         {
             if (textBoxValue.Visible == true)
             {
-                treeView.SelectedNode.Text = ((FieldInfo)treeView.SelectedNode.Tag).Name + ": " + textBoxValue.Text;
+                treeView.SelectedNode.Text = ((InfoCRUD)treeView.SelectedNode.Tag).Name + ": " + textBoxValue.Text;
                 textBoxValue.Clear();
             }
             else
             {
                 if (numericValue.Visible == true)
                 {
-                    treeView.SelectedNode.Text = ((FieldInfo)treeView.SelectedNode.Tag).Name + ": " + numericValue.Value;
+                    treeView.SelectedNode.Text = ((InfoCRUD)treeView.SelectedNode.Tag).Name + ": " + numericValue.Value;
                     numericValue.Value = 0;
                 }
                 else
                 {
-                    treeView.SelectedNode.Text = ((FieldInfo)treeView.SelectedNode.Tag).Name + ": " + comboBoxValue.Text;
+                    treeView.SelectedNode.Text = ((InfoCRUD)treeView.SelectedNode.Tag).Name + ": " + comboBoxValue.Text;
                 }
             }
         }
@@ -139,8 +135,9 @@ namespace lab_2
             if (treeView.SelectedNode.Level == 2) //Is property selected
             {
                 btnEdit.Enabled = true;
+                Type fType = ((InfoCRUD)treeView.SelectedNode.Tag).type;
 
-                if (((FieldInfo)treeView.SelectedNode.Tag).FieldType == typeof(string))
+                if (fType == typeof(string))
                 {
                     textBoxValue.Visible = true;
                     textBoxValue.Enabled = true;
@@ -149,7 +146,7 @@ namespace lab_2
                 }
                 else
                 {
-                    if (((FieldInfo)treeView.SelectedNode.Tag).FieldType == typeof(int))
+                    if (fType == typeof(int))
                     {
                         numericValue.Visible = true;
                         numericValue.Enabled = true;
@@ -158,12 +155,20 @@ namespace lab_2
                     }
                     else
                     {
-
                         textBoxValue.Visible = false;
                         numericValue.Visible = false;
                         comboBoxValue.Visible = true;
                         comboBoxValue.Enabled = true;
-                        comboBoxValue_Fill();
+
+                        if (fType.IsEnum)
+                        {
+                            comboBoxValue.Items.Clear();
+                            comboBoxValue.Items.AddRange(Enum.GetNames(fType));
+                        }
+                        else
+                        {
+                            comboBoxValue_Fill();
+                        }
                     }
                 }
             }
@@ -178,23 +183,42 @@ namespace lab_2
             btnDelete.Enabled = treeView.SelectedNode.Level == 1 ? true : false;
         }
 
+        private object[] GetUserCreatedObjs()
+        {
+            object[] objects = new object[treeView.Nodes[0].Nodes.Count];
+            foreach (TreeNode T in treeView.Nodes[0].Nodes) //Look through objects
+            {
+                
+                foreach (TreeNode P in T.Nodes) //Look through properties
+                {
+                    
+                }
+            }
+            return objects;
+        }
+
         private void btnSave_Click(object sender, EventArgs e)
         {
             if (saveFileDialog.ShowDialog() == DialogResult.Cancel)
                 return;
 
             ISerializer serializer = (ISerializer)Activator.CreateInstance((Type)comboBoxType.SelectedValue);
-            object[] objects = new object[treeView.Nodes[0].Nodes.Count];
+            
 
             using (FileStream fs = new FileStream(saveFileDialog.FileName, FileMode.OpenOrCreate))
             {
-                serializer.Serialize(objects, fs);
+                //serializer.Serialize(objects, fs);
             }
         }
 
         private void numericValue_ValueChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnOpen_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 }
