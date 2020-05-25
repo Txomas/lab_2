@@ -196,14 +196,15 @@ namespace lab_2
             int i = 0;
             foreach (TreeNode T in treeView.Nodes[0].Nodes) //Look through objects
             {
-                object[] args = new object[T.Nodes.Count];
+                FieldInfo[] Fields = ((InfoCRUD)T.Tag).type.GetFields();
                 int j = 0;
+                object obj = Activator.CreateInstance(((InfoCRUD)T.Tag).type);
                 foreach (TreeNode P in T.Nodes) //Look through properties
                 {
-                    args[j] = ((InfoCRUD)P.Tag).Value;
+                    Fields[j].SetValue(obj, ((InfoCRUD)P.Tag).Value);
                     j++;
                 }
-                objects[i] = Activator.CreateInstance(((InfoCRUD)T.Tag).type, args);
+                objects[i] = obj;
                 i++;
             }
             return objects;
@@ -241,10 +242,9 @@ namespace lab_2
                     treeView.Nodes[0].LastNode.Nodes.Add(new TreeNode(I.Name + ": " + I.Value.ToString()));
                     treeView.Nodes[0].LastNode.LastNode.Tag = I;
                 }
+                InfoCRUD i = new InfoCRUD { type = obj.GetType() };
+                treeView.Nodes[0].LastNode.Tag = i;
             }
-
-            InfoCRUD i = new InfoCRUD { type = (Type)comboBox.SelectedItem };
-            treeView.Nodes[0].LastNode.Tag = i;
 
             treeView.Nodes[0].ExpandAll();
             if (comboBoxValue.Enabled == true)
