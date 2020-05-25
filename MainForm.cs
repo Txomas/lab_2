@@ -65,6 +65,7 @@ namespace lab_2
             foreach (FieldInfo f in ((Type)comboBox.SelectedItem).GetFields())
             {
                 InfoCRUD I = new InfoCRUD { type = f.FieldType };
+                I.Value = f.FieldType == typeof(string) ? "" : Activator.CreateInstance(f.FieldType);
                 object[] attrs = f.GetCustomAttributes(typeof(NormalNameAttribute), false);
                 I.Name = attrs.Length > 0 ? ((NormalNameAttribute)attrs[0]).Name : f.Name;
                 treeView.Nodes[0].LastNode.Nodes.Add(new TreeNode(I.Name + ": "));
@@ -102,6 +103,7 @@ namespace lab_2
             if (textBoxValue.Visible == true)
             {
                 treeView.SelectedNode.Text = ((InfoCRUD)treeView.SelectedNode.Tag).Name + ": " + textBoxValue.Text;
+                ((InfoCRUD)treeView.SelectedNode.Tag).Value = textBoxValue.Text;
                 textBoxValue.Clear();
             }
             else
@@ -109,11 +111,16 @@ namespace lab_2
                 if (numericValue.Visible == true)
                 {
                     treeView.SelectedNode.Text = ((InfoCRUD)treeView.SelectedNode.Tag).Name + ": " + numericValue.Value;
+                    ((InfoCRUD)treeView.SelectedNode.Tag).Value = (int)numericValue.Value;
                     numericValue.Value = 0;
                 }
                 else
                 {
                     treeView.SelectedNode.Text = ((InfoCRUD)treeView.SelectedNode.Tag).Name + ": " + comboBoxValue.Text;
+                    if (((InfoCRUD)treeView.SelectedNode.Tag).type.IsEnum)
+                    {
+                        ((InfoCRUD)treeView.SelectedNode.Tag).Value = Enum.Parse(((InfoCRUD)treeView.SelectedNode.Tag).type, comboBoxValue.Text);
+                    }
                 }
             }
         }
@@ -186,13 +193,18 @@ namespace lab_2
         private object[] GetUserCreatedObjs()
         {
             object[] objects = new object[treeView.Nodes[0].Nodes.Count];
+            int i = 0;
             foreach (TreeNode T in treeView.Nodes[0].Nodes) //Look through objects
             {
-                
+                object[] args = new object[T.Nodes.Count];
+                int j = 0;
                 foreach (TreeNode P in T.Nodes) //Look through properties
                 {
-                    
+                    args[j] = ((InfoCRUD)P.Tag).Value;
+                    j++;
                 }
+                objects[i] = Activator.CreateInstance(((InfoCRUD)T.Tag).type, args);
+                i++;
             }
             return objects;
         }
@@ -203,11 +215,9 @@ namespace lab_2
                 return;
 
             ISerializer serializer = (ISerializer)Activator.CreateInstance((Type)comboBoxType.SelectedValue);
-            
-
             using (FileStream fs = new FileStream(saveFileDialog.FileName, FileMode.OpenOrCreate))
             {
-                //serializer.Serialize(objects, fs);
+                serializer.Serialize(GetUserCreatedObjs(), fs);
             }
         }
 
@@ -216,9 +226,44 @@ namespace lab_2
 
         }
 
+        private void SetUserCreatedObjs(object[] objs)
+        {
+            treeView.Nodes[0].Nodes.Clear();
+            foreach (object obj in objs)
+            {
+                treeView.Nodes[0].Nodes.Add(new TreeNode(obj.GetType().Name));
+                foreach (FieldInfo f in obj.GetType().GetFields())
+                {
+                    InfoCRUD I = new InfoCRUD { type = f.FieldType };
+                    I.Value = f.GetValue(obj);
+                    object[] attrs = f.GetCustomAttributes(typeof(NormalNameAttribute), false);
+                    I.Name = attrs.Length > 0 ? ((NormalNameAttribute)attrs[0]).Name : f.Name;
+                    treeView.Nodes[0].LastNode.Nodes.Add(new TreeNode(I.Name + ": " + I.Value.ToString()));
+                    treeView.Nodes[0].LastNode.LastNode.Tag = I;
+                }
+            }
+
+            InfoCRUD i = new InfoCRUD { type = (Type)comboBox.SelectedItem };
+            treeView.Nodes[0].LastNode.Tag = i;
+
+            treeView.Nodes[0].ExpandAll();
+            if (comboBoxValue.Enabled == true)
+            {
+                comboBoxValue_Fill();
+            }
+            textBoxName.Clear();
+        }
+
         private void btnOpen_Click(object sender, EventArgs e)
         {
-            
+            if (openFileDialog.ShowDialog() == DialogResult.Cancel)
+                return;
+
+            ISerializer serializer = (ISerializer)Activator.CreateInstance((Type)comboBoxType.SelectedValue);
+            using (FileStream fs = new FileStream(openFileDialog.FileName, FileMode.OpenOrCreate))
+            {
+                SetUserCreatedObjs(serializer.Deserialize(fs));
+            }
         }
     }
 }

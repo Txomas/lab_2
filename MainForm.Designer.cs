@@ -28,10 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Objects");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Objects");
             this.comboBox = new System.Windows.Forms.ComboBox();
             this.btnAdd = new System.Windows.Forms.Button();
             this.panel = new System.Windows.Forms.Panel();
+            this.numericValue = new System.Windows.Forms.NumericUpDown();
+            this.comboBoxType = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.btnOpen = new System.Windows.Forms.Button();
+            this.btnSave = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.textBoxName = new System.Windows.Forms.TextBox();
             this.comboBoxValue = new System.Windows.Forms.ComboBox();
@@ -40,14 +46,8 @@
             this.btnDelete = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.treeView = new System.Windows.Forms.TreeView();
-            this.label3 = new System.Windows.Forms.Label();
-            this.btnSave = new System.Windows.Forms.Button();
-            this.btnOpen = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
-            this.comboBoxType = new System.Windows.Forms.ComboBox();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.numericValue = new System.Windows.Forms.NumericUpDown();
             this.panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericValue)).BeginInit();
             this.SuspendLayout();
@@ -99,13 +99,80 @@
             this.panel.Size = new System.Drawing.Size(299, 590);
             this.panel.TabIndex = 2;
             // 
+            // numericValue
+            // 
+            this.numericValue.Enabled = false;
+            this.numericValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.numericValue.Location = new System.Drawing.Point(16, 306);
+            this.numericValue.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.numericValue.Name = "numericValue";
+            this.numericValue.Size = new System.Drawing.Size(271, 45);
+            this.numericValue.TabIndex = 16;
+            this.numericValue.Visible = false;
+            // 
+            // comboBoxType
+            // 
+            this.comboBoxType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxType.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.comboBoxType.FormattingEnabled = true;
+            this.comboBoxType.Location = new System.Drawing.Point(16, 468);
+            this.comboBoxType.Name = "comboBoxType";
+            this.comboBoxType.Size = new System.Drawing.Size(271, 46);
+            this.comboBoxType.TabIndex = 15;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label4.Location = new System.Drawing.Point(3, 426);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(274, 38);
+            this.label4.TabIndex = 14;
+            this.label4.Text = "Serialization type:";
+            // 
+            // btnOpen
+            // 
+            this.btnOpen.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnOpen.Location = new System.Drawing.Point(157, 520);
+            this.btnOpen.Name = "btnOpen";
+            this.btnOpen.Size = new System.Drawing.Size(135, 58);
+            this.btnOpen.TabIndex = 12;
+            this.btnOpen.Text = "Open";
+            this.btnOpen.UseVisualStyleBackColor = true;
+            this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
+            // 
+            // btnSave
+            // 
+            this.btnSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnSave.Location = new System.Drawing.Point(6, 520);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(145, 58);
+            this.btnSave.TabIndex = 11;
+            this.btnSave.Text = "Save";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label3.Location = new System.Drawing.Point(36, 9);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(224, 38);
+            this.label3.TabIndex = 10;
+            this.label3.Text = "Choose class:";
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label2.Location = new System.Drawing.Point(36, 264);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(245, 39);
+            this.label2.Size = new System.Drawing.Size(237, 38);
             this.label2.TabIndex = 9;
             this.label2.Text = "Property value:";
             // 
@@ -169,7 +236,7 @@
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label1.Location = new System.Drawing.Point(36, 100);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(218, 39);
+            this.label1.Size = new System.Drawing.Size(211, 38);
             this.label1.TabIndex = 2;
             this.label1.Text = "Object name:";
             // 
@@ -180,65 +247,13 @@
             this.treeView.HideSelection = false;
             this.treeView.Location = new System.Drawing.Point(0, 0);
             this.treeView.Name = "treeView";
-            treeNode7.Name = "Node0";
-            treeNode7.Text = "Objects";
+            treeNode3.Name = "Node0";
+            treeNode3.Text = "Objects";
             this.treeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode7});
+            treeNode3});
             this.treeView.Size = new System.Drawing.Size(466, 590);
             this.treeView.TabIndex = 3;
             this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_AfterSelect);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label3.Location = new System.Drawing.Point(36, 9);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(231, 39);
-            this.label3.TabIndex = 10;
-            this.label3.Text = "Choose class:";
-            // 
-            // btnSave
-            // 
-            this.btnSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnSave.Location = new System.Drawing.Point(6, 520);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(145, 58);
-            this.btnSave.TabIndex = 11;
-            this.btnSave.Text = "Save";
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // btnOpen
-            // 
-            this.btnOpen.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnOpen.Location = new System.Drawing.Point(157, 520);
-            this.btnOpen.Name = "btnOpen";
-            this.btnOpen.Size = new System.Drawing.Size(135, 58);
-            this.btnOpen.TabIndex = 12;
-            this.btnOpen.Text = "Open";
-            this.btnOpen.UseVisualStyleBackColor = true;
-            this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label4.Location = new System.Drawing.Point(3, 426);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(286, 39);
-            this.label4.TabIndex = 14;
-            this.label4.Text = "Serialization type:";
-            // 
-            // comboBoxType
-            // 
-            this.comboBoxType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxType.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.comboBoxType.FormattingEnabled = true;
-            this.comboBoxType.Location = new System.Drawing.Point(16, 468);
-            this.comboBoxType.Name = "comboBoxType";
-            this.comboBoxType.Size = new System.Drawing.Size(271, 46);
-            this.comboBoxType.TabIndex = 15;
             // 
             // saveFileDialog
             // 
@@ -249,22 +264,6 @@
             // 
             this.openFileDialog.DefaultExt = "dat";
             this.openFileDialog.FileName = "openFileDialog1";
-            // 
-            // numericValue
-            // 
-            this.numericValue.DecimalPlaces = 3;
-            this.numericValue.Enabled = false;
-            this.numericValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.numericValue.Location = new System.Drawing.Point(16, 306);
-            this.numericValue.Maximum = new decimal(new int[] {
-            100000000,
-            0,
-            0,
-            0});
-            this.numericValue.Name = "numericValue";
-            this.numericValue.Size = new System.Drawing.Size(271, 45);
-            this.numericValue.TabIndex = 16;
-            this.numericValue.Visible = false;
             // 
             // MainForm
             // 

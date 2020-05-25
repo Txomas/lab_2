@@ -10,5 +10,6 @@ namespace lab_2
     {
         public Type type { get; set; }
         public string Name { get; set; }
+        public object Value { get; set; }
     }
 }
