@@ -39,7 +39,7 @@ namespace lab_2
             List<Type> Types = new List<Type>();
             foreach (Type t in CRUDAsm.GetTypes())
             {
-                if (!t.IsAbstract && !t.IsSubclassOf(typeof(Attribute)))
+                if (!t.IsAbstract && !t.IsSubclassOf(typeof(Attribute)) && !t.IsEnum)
                     Types.Add(t);
             }
             comboBox.DataSource = Types;
@@ -54,21 +54,32 @@ namespace lab_2
             {
                 if (((InfoCRUD)T.Tag).type == ((InfoCRUD)treeView.SelectedNode.Tag).type) 
                 {
-                    comboBoxValue.Items.Add(T.Text);
+                    comboBoxValue.Items.Add(((InfoCRUD)T.Nodes[0].Tag).Value);
                 }
             }
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            treeView.Nodes[0].Nodes.Add(new TreeNode(textBoxName.Text));
-            foreach (FieldInfo f in ((Type)comboBox.SelectedItem).GetFields())
+            treeView.Nodes[0].Nodes.Add(new TreeNode(comboBox.Text));
+            foreach (PropertyInfo f in ((Type)comboBox.SelectedItem).GetProperties())
             {
-                InfoCRUD I = new InfoCRUD { type = f.FieldType };
-                I.Value = f.FieldType == typeof(string) ? "" : Activator.CreateInstance(f.FieldType);
+                InfoCRUD I = new InfoCRUD { type = f.PropertyType };
+                
                 object[] attrs = f.GetCustomAttributes(typeof(NormalNameAttribute), false);
                 I.Name = attrs.Length > 0 ? ((NormalNameAttribute)attrs[0]).Name : f.Name;
-                treeView.Nodes[0].LastNode.Nodes.Add(new TreeNode(I.Name + ": "));
+                I.Name += ": ";
+
+                if (I.Name == "Id: ")
+                {
+                    I.Value = Guid.NewGuid();
+                    treeView.Nodes[0].LastNode.Nodes.Add(new TreeNode(I.Name + I.Value.ToString()));
+                }
+                else
+                {
+                    treeView.Nodes[0].LastNode.Nodes.Add(new TreeNode(I.Name));
+                    I.Value = f.PropertyType == typeof(string) ? "" : Activator.CreateInstance(f.PropertyType);
+                }
                 treeView.Nodes[0].LastNode.LastNode.Tag = I;    
             }
             InfoCRUD i = new InfoCRUD { type = (Type)comboBox.SelectedItem };
@@ -79,22 +90,25 @@ namespace lab_2
             {
                 comboBoxValue_Fill();
             }
-            textBoxName.Clear();
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            foreach (TreeNode T in treeView.Nodes[0].Nodes) //Look through objects
+            if (((InfoCRUD)treeView.SelectedNode.Nodes[0].Tag).Name == "Id: ")
             {
-                foreach (TreeNode P in T.Nodes) //Look through properties
+                string id = ((InfoCRUD)treeView.SelectedNode.Nodes[0].Tag).Value.ToString();
+                foreach (TreeNode T in treeView.Nodes[0].Nodes) //Look through objects
                 {
-                    if (P.Text == ((InfoCRUD)P.Tag).Name + ": " + treeView.SelectedNode.Text) //Is property-node value equals object-node text
+                    foreach (TreeNode P in T.Nodes) //Look through properties
                     {
-                        P.Text = ((InfoCRUD)P.Tag).Name; //Clear property value
+                        if (P.Text == ((InfoCRUD)P.Tag).Name + id) //Is property-node value equals object-node text
+                        {
+                            P.Text = ((InfoCRUD)P.Tag).Name; //Clear property value
+                        }
                     }
                 }
             }
-            
+
             treeView.Nodes.Remove(treeView.SelectedNode);
         }
 
@@ -102,7 +116,7 @@ namespace lab_2
         {
             if (textBoxValue.Visible == true)
             {
-                treeView.SelectedNode.Text = ((InfoCRUD)treeView.SelectedNode.Tag).Name + ": " + textBoxValue.Text;
+                treeView.SelectedNode.Text = ((InfoCRUD)treeView.SelectedNode.Tag).Name + textBoxValue.Text;
                 ((InfoCRUD)treeView.SelectedNode.Tag).Value = textBoxValue.Text;
                 textBoxValue.Clear();
             }
@@ -110,36 +124,34 @@ namespace lab_2
             {
                 if (numericValue.Visible == true)
                 {
-                    treeView.SelectedNode.Text = ((InfoCRUD)treeView.SelectedNode.Tag).Name + ": " + numericValue.Value;
+                    treeView.SelectedNode.Text = ((InfoCRUD)treeView.SelectedNode.Tag).Name + numericValue.Value;
                     ((InfoCRUD)treeView.SelectedNode.Tag).Value = (int)numericValue.Value;
                     numericValue.Value = 0;
                 }
                 else
                 {
-                    treeView.SelectedNode.Text = ((InfoCRUD)treeView.SelectedNode.Tag).Name + ": " + comboBoxValue.Text;
+                    treeView.SelectedNode.Text = ((InfoCRUD)treeView.SelectedNode.Tag).Name + comboBoxValue.Text;
                     if (((InfoCRUD)treeView.SelectedNode.Tag).type.IsEnum)
                     {
                         ((InfoCRUD)treeView.SelectedNode.Tag).Value = Enum.Parse(((InfoCRUD)treeView.SelectedNode.Tag).type, comboBoxValue.Text);
                     }
+                    else
+                    {
+                        ((InfoCRUD)treeView.SelectedNode.Tag).Value = comboBoxValue.SelectedItem;
+                    }    
+
                 }
             }
         }
 
         private void textBoxName_TextChanged(object sender, EventArgs e)
         {
-            if (textBoxName.Text == "")
-            {
-                btnAdd.Enabled = false;
-            }
-            else
-            {
-                btnAdd.Enabled = true;
-            }
+            
         }
 
         private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            if (treeView.SelectedNode.Level == 2) //Is property selected
+            if ((treeView.SelectedNode.Level == 2) && (!treeView.SelectedNode.Text.StartsWith("Id: "))) //Is property selected
             {
                 btnEdit.Enabled = true;
                 Type fType = ((InfoCRUD)treeView.SelectedNode.Tag).type;
@@ -194,14 +206,38 @@ namespace lab_2
         {
             object[] objects = new object[treeView.Nodes[0].Nodes.Count];
             int i = 0;
+            InfoCRUD infoCRUD;
             foreach (TreeNode T in treeView.Nodes[0].Nodes) //Look through objects
             {
-                FieldInfo[] Fields = ((InfoCRUD)T.Tag).type.GetFields();
+                infoCRUD = (InfoCRUD)T.Tag;
+                PropertyInfo[] Fields = infoCRUD.type.GetProperties();
                 int j = 0;
-                object obj = Activator.CreateInstance(((InfoCRUD)T.Tag).type);
+                object obj = Activator.CreateInstance(infoCRUD.type);
                 foreach (TreeNode P in T.Nodes) //Look through properties
                 {
-                    Fields[j].SetValue(obj, ((InfoCRUD)P.Tag).Value);
+                    infoCRUD = (InfoCRUD)P.Tag;
+                    if ((infoCRUD.Value is Guid) && (infoCRUD.Name != "Id: "))
+                    {
+                        foreach (TreeNode t in treeView.Nodes[0].Nodes) //Look through objects
+                        {
+                            if (((InfoCRUD)t.Nodes[0].Tag).Name == "Id: ")
+                            {
+                                if (((InfoCRUD)t.Nodes[0].Tag).Value == infoCRUD.Value)
+                                {
+                                    PropertyInfo[] fields = ((InfoCRUD)t.Tag).type.GetProperties();
+                                    int k = 0;
+                                    object o = Activator.CreateInstance(((InfoCRUD)t.Tag).type);
+                                    foreach (TreeNode p in t.Nodes) //Look through properties
+                                    {
+                                        fields[k].SetValue(o, ((InfoCRUD)p.Tag).Value);
+                                        k++;
+                                    }
+                                    infoCRUD.Value = o;
+                                }
+                            }   
+                        }
+                    }
+                    Fields[j].SetValue(obj, infoCRUD.Value);
                     j++;
                 }
                 objects[i] = obj;
@@ -233,13 +269,14 @@ namespace lab_2
             foreach (object obj in objs)
             {
                 treeView.Nodes[0].Nodes.Add(new TreeNode(obj.GetType().Name));
-                foreach (FieldInfo f in obj.GetType().GetFields())
+                foreach (PropertyInfo f in obj.GetType().GetProperties())
                 {
-                    InfoCRUD I = new InfoCRUD { type = f.FieldType };
+                    InfoCRUD I = new InfoCRUD { type = f.PropertyType };
                     I.Value = f.GetValue(obj);
                     object[] attrs = f.GetCustomAttributes(typeof(NormalNameAttribute), false);
                     I.Name = attrs.Length > 0 ? ((NormalNameAttribute)attrs[0]).Name : f.Name;
-                    treeView.Nodes[0].LastNode.Nodes.Add(new TreeNode(I.Name + ": " + I.Value.ToString()));
+                    I.Name += ": ";
+                    treeView.Nodes[0].LastNode.Nodes.Add(new TreeNode(I.Name + I.Value.ToString()));
                     treeView.Nodes[0].LastNode.LastNode.Tag = I;
                 }
                 InfoCRUD i = new InfoCRUD { type = obj.GetType() };
@@ -247,11 +284,6 @@ namespace lab_2
             }
 
             treeView.Nodes[0].ExpandAll();
-            if (comboBoxValue.Enabled == true)
-            {
-                comboBoxValue_Fill();
-            }
-            textBoxName.Clear();
         }
 
         private void btnOpen_Click(object sender, EventArgs e)
