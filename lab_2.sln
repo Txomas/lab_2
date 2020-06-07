@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRUD_lib", "..\CRUD_lib\CRU
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serialization_lib", "..\Serialization_lib\Serialization_lib.csproj", "{F56DB4EF-8EF2-45C7-B537-4A99160FF9B4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IArchivatorLib", "..\PluginsLib\IArchivatorLib.csproj", "{BA94DD1A-EB56-4A28-BE21-846CC62E7CE9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{F56DB4EF-8EF2-45C7-B537-4A99160FF9B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F56DB4EF-8EF2-45C7-B537-4A99160FF9B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F56DB4EF-8EF2-45C7-B537-4A99160FF9B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA94DD1A-EB56-4A28-BE21-846CC62E7CE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA94DD1A-EB56-4A28-BE21-846CC62E7CE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA94DD1A-EB56-4A28-BE21-846CC62E7CE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA94DD1A-EB56-4A28-BE21-846CC62E7CE9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

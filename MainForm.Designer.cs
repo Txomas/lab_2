@@ -28,10 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Objects");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Objects");
             this.comboBox = new System.Windows.Forms.ComboBox();
             this.btnAdd = new System.Windows.Forms.Button();
             this.panel = new System.Windows.Forms.Panel();
+            this.comboBoxPlugin = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.numericValue = new System.Windows.Forms.NumericUpDown();
             this.comboBoxType = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -46,6 +48,8 @@
             this.treeView = new System.Windows.Forms.TreeView();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.btnDeletePlugin = new System.Windows.Forms.Button();
+            this.btnLoadPlugin = new System.Windows.Forms.Button();
             this.panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericValue)).BeginInit();
             this.SuspendLayout();
@@ -57,9 +61,9 @@
             this.comboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboBox.FormattingEnabled = true;
-            this.comboBox.Location = new System.Drawing.Point(16, 51);
+            this.comboBox.Location = new System.Drawing.Point(16, 50);
             this.comboBox.Name = "comboBox";
-            this.comboBox.Size = new System.Drawing.Size(360, 46);
+            this.comboBox.Size = new System.Drawing.Size(450, 46);
             this.comboBox.TabIndex = 0;
             // 
             // btnAdd
@@ -75,6 +79,10 @@
             // 
             // panel
             // 
+            this.panel.Controls.Add(this.btnDeletePlugin);
+            this.panel.Controls.Add(this.btnLoadPlugin);
+            this.panel.Controls.Add(this.comboBoxPlugin);
+            this.panel.Controls.Add(this.label1);
             this.panel.Controls.Add(this.numericValue);
             this.panel.Controls.Add(this.comboBoxType);
             this.panel.Controls.Add(this.label4);
@@ -89,23 +97,43 @@
             this.panel.Controls.Add(this.comboBox);
             this.panel.Controls.Add(this.btnAdd);
             this.panel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel.Location = new System.Drawing.Point(645, 0);
+            this.panel.Location = new System.Drawing.Point(656, 0);
             this.panel.Name = "panel";
-            this.panel.Size = new System.Drawing.Size(388, 590);
+            this.panel.Size = new System.Drawing.Size(478, 730);
             this.panel.TabIndex = 2;
+            // 
+            // comboBoxPlugin
+            // 
+            this.comboBoxPlugin.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxPlugin.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.comboBoxPlugin.FormattingEnabled = true;
+            this.comboBoxPlugin.Location = new System.Drawing.Point(16, 443);
+            this.comboBoxPlugin.Name = "comboBoxPlugin";
+            this.comboBoxPlugin.Size = new System.Drawing.Size(450, 46);
+            this.comboBoxPlugin.TabIndex = 18;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.Location = new System.Drawing.Point(200, 402);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(116, 38);
+            this.label1.TabIndex = 17;
+            this.label1.Text = "Plugin:";
             // 
             // numericValue
             // 
             this.numericValue.Enabled = false;
             this.numericValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.numericValue.Location = new System.Drawing.Point(16, 266);
+            this.numericValue.Location = new System.Drawing.Point(16, 260);
             this.numericValue.Maximum = new decimal(new int[] {
             100000000,
             0,
             0,
             0});
             this.numericValue.Name = "numericValue";
-            this.numericValue.Size = new System.Drawing.Size(360, 45);
+            this.numericValue.Size = new System.Drawing.Size(450, 45);
             this.numericValue.TabIndex = 16;
             this.numericValue.Visible = false;
             // 
@@ -114,16 +142,16 @@
             this.comboBoxType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxType.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboBoxType.FormattingEnabled = true;
-            this.comboBoxType.Location = new System.Drawing.Point(16, 468);
+            this.comboBoxType.Location = new System.Drawing.Point(16, 608);
             this.comboBoxType.Name = "comboBoxType";
-            this.comboBoxType.Size = new System.Drawing.Size(360, 46);
+            this.comboBoxType.Size = new System.Drawing.Size(450, 46);
             this.comboBoxType.TabIndex = 15;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label4.Location = new System.Drawing.Point(68, 427);
+            this.label4.Location = new System.Drawing.Point(111, 567);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(274, 38);
             this.label4.TabIndex = 14;
@@ -132,7 +160,7 @@
             // btnOpen
             // 
             this.btnOpen.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnOpen.Location = new System.Drawing.Point(207, 520);
+            this.btnOpen.Location = new System.Drawing.Point(297, 660);
             this.btnOpen.Name = "btnOpen";
             this.btnOpen.Size = new System.Drawing.Size(135, 58);
             this.btnOpen.TabIndex = 12;
@@ -143,7 +171,7 @@
             // btnSave
             // 
             this.btnSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnSave.Location = new System.Drawing.Point(56, 520);
+            this.btnSave.Location = new System.Drawing.Point(56, 660);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(145, 58);
             this.btnSave.TabIndex = 11;
@@ -155,7 +183,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label3.Location = new System.Drawing.Point(87, 10);
+            this.label3.Location = new System.Drawing.Point(140, 9);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(224, 38);
             this.label3.TabIndex = 10;
@@ -165,7 +193,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label2.Location = new System.Drawing.Point(87, 225);
+            this.label2.Location = new System.Drawing.Point(139, 218);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(237, 38);
             this.label2.TabIndex = 9;
@@ -177,9 +205,9 @@
             this.comboBoxValue.Enabled = false;
             this.comboBoxValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboBoxValue.FormattingEnabled = true;
-            this.comboBoxValue.Location = new System.Drawing.Point(16, 266);
+            this.comboBoxValue.Location = new System.Drawing.Point(16, 260);
             this.comboBoxValue.Name = "comboBoxValue";
-            this.comboBoxValue.Size = new System.Drawing.Size(360, 46);
+            this.comboBoxValue.Size = new System.Drawing.Size(450, 46);
             this.comboBoxValue.TabIndex = 7;
             this.comboBoxValue.Visible = false;
             // 
@@ -187,16 +215,16 @@
             // 
             this.textBoxValue.Enabled = false;
             this.textBoxValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBoxValue.Location = new System.Drawing.Point(16, 267);
+            this.textBoxValue.Location = new System.Drawing.Point(16, 259);
             this.textBoxValue.Name = "textBoxValue";
-            this.textBoxValue.Size = new System.Drawing.Size(360, 45);
+            this.textBoxValue.Size = new System.Drawing.Size(450, 45);
             this.textBoxValue.TabIndex = 6;
             // 
             // btnEdit
             // 
             this.btnEdit.Enabled = false;
             this.btnEdit.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnEdit.Location = new System.Drawing.Point(147, 318);
+            this.btnEdit.Location = new System.Drawing.Point(186, 309);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(130, 58);
             this.btnEdit.TabIndex = 5;
@@ -208,7 +236,7 @@
             // 
             this.btnDelete.Enabled = false;
             this.btnDelete.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnDelete.Location = new System.Drawing.Point(207, 114);
+            this.btnDelete.Location = new System.Drawing.Point(297, 114);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(135, 58);
             this.btnDelete.TabIndex = 4;
@@ -223,11 +251,11 @@
             this.treeView.HideSelection = false;
             this.treeView.Location = new System.Drawing.Point(0, 0);
             this.treeView.Name = "treeView";
-            treeNode2.Name = "Node0";
-            treeNode2.Text = "Objects";
+            treeNode1.Name = "Node0";
+            treeNode1.Text = "Objects";
             this.treeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode2});
-            this.treeView.Size = new System.Drawing.Size(645, 590);
+            treeNode1});
+            this.treeView.Size = new System.Drawing.Size(656, 730);
             this.treeView.TabIndex = 3;
             this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_AfterSelect);
             // 
@@ -241,11 +269,33 @@
             this.openFileDialog.DefaultExt = "dat";
             this.openFileDialog.FileName = "openFileDialog1";
             // 
+            // btnDeletePlugin
+            // 
+            this.btnDeletePlugin.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnDeletePlugin.Location = new System.Drawing.Point(297, 495);
+            this.btnDeletePlugin.Name = "btnDeletePlugin";
+            this.btnDeletePlugin.Size = new System.Drawing.Size(135, 58);
+            this.btnDeletePlugin.TabIndex = 20;
+            this.btnDeletePlugin.Text = "Delete";
+            this.btnDeletePlugin.UseVisualStyleBackColor = true;
+            this.btnDeletePlugin.Click += new System.EventHandler(this.btnDeletePlugin_Click);
+            // 
+            // btnLoadPlugin
+            // 
+            this.btnLoadPlugin.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnLoadPlugin.Location = new System.Drawing.Point(56, 495);
+            this.btnLoadPlugin.Name = "btnLoadPlugin";
+            this.btnLoadPlugin.Size = new System.Drawing.Size(145, 58);
+            this.btnLoadPlugin.TabIndex = 19;
+            this.btnLoadPlugin.Text = "Load";
+            this.btnLoadPlugin.UseVisualStyleBackColor = true;
+            this.btnLoadPlugin.Click += new System.EventHandler(this.btnLoadPlugin_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1033, 590);
+            this.ClientSize = new System.Drawing.Size(1134, 730);
             this.Controls.Add(this.treeView);
             this.Controls.Add(this.panel);
             this.Name = "MainForm";
@@ -277,6 +327,10 @@
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.NumericUpDown numericValue;
+        private System.Windows.Forms.ComboBox comboBoxPlugin;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btnDeletePlugin;
+        private System.Windows.Forms.Button btnLoadPlugin;
     }
 }
 

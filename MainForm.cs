@@ -11,6 +11,7 @@ using System.Reflection;
 using CRUD_lib;
 using Serialization_lib;
 using System.IO;
+using IArchivatorLib;
 
 namespace lab_2
 {
@@ -19,6 +20,9 @@ namespace lab_2
          public MainForm()
         {
             InitializeComponent();
+
+            comboBoxPlugin.DataSource = PluginsManager.GetPlugins();
+            comboBoxPlugin.DisplayMember = "Name";
 
             Assembly SerializationAsm = Assembly.LoadFrom("Serialization_lib.dll");
             List<ControlInfoAttribute> Attributes = new List<ControlInfoAttribute>();
@@ -256,6 +260,9 @@ namespace lab_2
             {
                 serializer.Serialize(GetUserCreatedObjs(), fs);
             }
+
+            IArchivator archivator = (IArchivator)Activator.CreateInstance(comboBoxPlugin.SelectedValue.GetType());
+            archivator.Compress(new FileInfo(saveFileDialog.FileName));
         }
 
         private void numericValue_ValueChanged(object sender, EventArgs e)
@@ -291,11 +298,55 @@ namespace lab_2
             if (openFileDialog.ShowDialog() == DialogResult.Cancel)
                 return;
 
+            string FileName = openFileDialog.FileName;
+            if (!FileName.EndsWith(".dat"))
+            {
+                var plugins = PluginsManager.GetPlugins();
+                bool IsPluginExist = false;
+                foreach (var plugin in plugins)
+                {
+                    if (FileName.EndsWith(plugin.Extension))
+                    {
+                        IsPluginExist = true;
+                        FileName = plugin.Decompress(new FileInfo(FileName));
+                        break;
+                    }
+                }
+                if (!IsPluginExist)
+                {
+                    MessageBox.Show("No plugin for this type of file");
+                    return;
+                }
+            }
+
             ISerializer serializer = (ISerializer)Activator.CreateInstance((Type)comboBoxType.SelectedValue);
-            using (FileStream fs = new FileStream(openFileDialog.FileName, FileMode.OpenOrCreate))
+            using (FileStream fs = new FileStream(FileName, FileMode.OpenOrCreate))
             {
                 SetUserCreatedObjs(serializer.Deserialize(fs));
             }
+        }
+
+        private void btnLoadPlugin_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog.ShowDialog() == DialogResult.Cancel)
+                return;
+            if (openFileDialog.FileName.EndsWith(".dll"))
+            {
+                PluginsManager.LoadPlugin(openFileDialog.FileName);
+                comboBoxPlugin.DataSource = PluginsManager.GetPlugins();
+            }
+            else
+            {
+                MessageBox.Show("Plugin file should be .dll file");
+            }
+        }
+
+        private void btnDeletePlugin_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog.ShowDialog() == DialogResult.Cancel)
+                return;
+            PluginsManager.DeletePlugin(openFileDialog.FileName);
+            comboBoxPlugin.DataSource = PluginsManager.GetPlugins();
         }
     }
 }

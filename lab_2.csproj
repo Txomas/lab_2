@@ -81,6 +81,7 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PluginsManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="MainForm.resx">
@@ -113,6 +114,10 @@
     <ProjectReference Include="..\CRUD_lib\CRUD_lib.csproj">
       <Project>{de08be58-9417-4f79-827f-cff94888502b}</Project>
       <Name>CRUD_lib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PluginsLib\IArchivatorLib.csproj">
+      <Project>{ba94dd1a-eb56-4a28-be21-846cc62e7ce9}</Project>
+      <Name>IArchivatorLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\Serialization_lib\Serialization_lib.csproj">
       <Project>{f56db4ef-8ef2-45c7-b537-4a99160ff9b4}</Project>
